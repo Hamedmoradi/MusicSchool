@@ -1,0 +1,302 @@
+<html xmlns:th="https://thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="https://thymeleaf.org ">
+<head>
+    <script src="jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>صفحه ثبت درخواست</title>
+</head>
+
+<script>
+    function myFunction() {
+        document.getElementById("myForm").reset();
+
+    }
+</script>
+
+<script>
+    function mySmsFunction() {
+        var checkBox = document.getElementById("mySmsCheck");
+        var text = document.getElementById("phoneText");
+        var hidden = document.getElementById("smsNotifier");
+        if (checkBox.checked == true) {
+            text.style.display = "block";
+            hidden.value = true;
+        } else {
+            text.style.display = "none";
+        }
+    }
+</script>
+<script>
+    function myEmailFunction() {
+        var checkBox = document.getElementById("myEmailCheck");
+        var text = document.getElementById("mailText");
+        var hidden = document.getElementById("emailNotifier");
+        if (checkBox.checked == true) {
+            text.style.display = "block";
+            hidden.value = true;
+        } else {
+            text.style.display = "none";
+        }
+    }
+</script>
+<script>
+    $(document).ready(function () {
+
+        $('#submit').click(function () {
+
+            /**
+             * http://api.jquery.com/jQuery.ajax/
+             */
+            var data = {};
+            data.smsChecked = $('#mySmsCheck').is(':checked');
+            data.emailChecked = $('#myEmailCheck').is(':checked');
+            data.name = $('#name').val();
+            data.family = $('#family').val();
+            data.nationalCode = $('#nationalCode').val();
+            data.cellphone = $('#phoneText').val();
+            data.emailAddress = $('#mailText').val();
+            data.address=$('#addressText').val();
+            data.age=$('#ageText').int;
+            // data.messageTitleService = [];
+            // if ($('#paymentfacility').is(':checked')) {
+            //     data.messageTitleService.push('paymentfacility')
+            // }
+            // if ($('#accountstatement').is(':checked')) {
+            //     data.messageTitleService.push('accountstatement')
+            // }
+            // if ($('#accounthistory').is(':checked')) {
+            //     data.messageTitleService.push('accounthistory')
+            // }
+            data.instrumental = [];
+            if ($('#instrument1').is(':checked')) {
+                data.instrumental.push('tar');
+            }
+            if ($('#instrument2').is(':checked')) {
+                data.instrumental.push('setar')
+            }
+            if ($('#instrument3').is(':checked')) {
+                data.instrumental.push('kamanche')
+            }
+            data.teacher = [];
+            if ($('#instrument1').is(':checked')) {
+                data.teacher.push('biglar');
+            }
+            if ($('#instrument2').is(':checked')) {
+                data.teacher.push('meshki')
+            }
+            if ($('#instrument3').is(':checked')) {
+                data.teacher.push('sadeghi')
+            }
+            data.day = [];
+            if ($('#weekday-sat').is(':checked')) {
+                data.day.push('sat');
+            }
+            if ($('#weekday-sun').is(':checked')) {
+                data.day.push('sun');
+            }
+            if ($('#weekday-mon').is(':checked')) {
+                data.day.push('mon');
+            }
+            if ($('#weekday-tur').is(':checked')) {
+                data.day.push('tur');
+            }
+            if ($('#weekday-tus').is(':checked')) {
+                data.day.push('tus');
+            }
+            if ($('#weekday-wen').is(':checked')) {
+                data.day.push('wen');
+            }
+            if ($('#weekday-fri').is(':checked')) {
+                data.day.push('fri');
+            }
+            data.time = $('#timeText').val();
+            myEmailFunction();
+            mySmsFunction();
+            myFunction();
+
+            console.log(JSON.stringify(data));
+            $.ajax({
+                type: 'POST',
+                url: '/api/signInStudent',
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                /**
+                 * A function to be called if the request fails.
+                 */
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('An error occurred... Look at the console (F12 or Ctrl+Shift+I, Console tab) for more information!');
+
+                    $('#result').html('<p>status code: ' + jqXHR.status + '</p><p>errorThrown: ' + errorThrown + '</p><p>jqXHR.responseText:</p><div>' + jqXHR.responseText + '</div>');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('errorThrown:');
+                    console.log(errorThrown);
+                },
+
+                /**
+                 * A function to be called if the request succeeds.
+                 */
+                success: function (data, textStatus, jqXHR) {
+                    $('#result').html(data);
+                    alert('student created! ');
+                    console.log('jqXHR:');
+                    console.log(jqXHR);
+                    console.log('textStatus:');
+                    console.log(textStatus);
+                    console.log('data:');
+                    console.log(data);
+                }
+            });
+        });
+        document.getElementById("myForm").reset();
+    });
+
+
+</script>
+<body>
+<div>
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+    <form id="myForm">
+        <table>
+            <tr>
+                <td><label for="name">نام</label></td>
+                <td><input id="name" type="text" name="name" class="text-input"/></td>
+            </tr>
+            <tr>
+                <td><label for="family">نام خانوادگی</label></td>
+                <td><input id="family" type="text" name="family" class="text-input"/></td>
+            </tr>
+            <tr>
+                <td><label for="nationalCode">کد ملی</label></td>
+                <td><input id="nationalCode" type="text" name="nationalCode" class="text-input"/></td>
+            </tr>
+            <tr>
+                <td><label for="ageText">سن</label></td>
+                <td><input id="ageText" type="number" name="age" class="text-input"/></td>
+            </tr>
+            <tr>
+                <td><label for="addressText">آدرس</label></td>
+                <td><input id="addressText" type="text" name="address" class="text-input"/></td>
+            </tr>
+            <tr>
+                <td><label for="mySmsCheck">فعال سازی سرویس پیامک</label></td>
+                <td><input id="mySmsCheck" type="checkbox" name="hasCellphone" onclick="mySmsFunction()"/></td>
+            </tr>
+            <tr>
+                <td><label for="myEmailCheck">فعال سازی سرویس ایمل</label></td>
+                <td><input id="myEmailCheck" type="checkbox" name="hasEmail" onclick="myEmailFunction()"/></td>
+            </tr>
+            <tr>
+                <td></td>
+
+            </tr>
+            <tr>
+                <td><label for="phoneText">شماره تلفن همراه</label></td>
+                <td><input id="phoneText" type="tel" name="phone" style="display:none" class="text-input"/></td>
+            </tr>
+            <tr>
+                <td><input id="smsNotifier" type="hidden"></td>
+            </tr>
+            <tr>
+                <td><label for="mailText">ایمل</label></td>
+                <td><input id="mailText" type="email" name="mail" style="display:none" class="text-input"/></td>
+            </tr>
+            <tr>
+                <td><input id="emailNotifier" type="hidden"></td>
+            </tr>
+            <tr>
+                <td></td>
+
+            </tr>
+            <tr>
+                <h4>ساز</h4>
+                <input type="checkbox" id="instrument1" name="vehicle1" value="Bike">
+                <label for="instrument1"> تار</label><br>
+                <input type="checkbox" id="instrument2" name="vehicle2" value="Car">
+                <label for="instrument2"> سه تار</label><br>
+                <input type="checkbox" id="instrument3" name="vehicle3" value="Boat">
+                <label for="instrument3"> کمانچه</label><br><br>
+            </tr>
+            <tr>
+                <td></td>
+
+            </tr>
+            <tr>
+                <h4>مدرس</h4>
+                <input type="checkbox" id="teacher1" name="vehicle1" value="Bike">
+                <label for="instrument1">پویان بیگلر</label><br>
+                <input type="checkbox" id="teacher12" name="vehicle2" value="Car">
+                <label for="instrument2">سپیده مشکی</label><br>
+                <input type="checkbox" id="teacher3" name="vehicle3" value="Boat">
+                <label for="instrument3">سهیل صادقی</label><br><br>
+            </tr>
+            <tr>
+                <td></td>
+
+            </tr>
+            <tr>
+                <h4>انتخاب روز</h4>
+                <div class="weekDays-selector">
+                    <input type="checkbox" id="weekday-sat" class="weekday"/>
+                    <label for="weekday-sat">sat</label>
+                    <input type="checkbox" id="weekday-sun" class="weekday"/>
+                    <label for="weekday-sun">sun</label>
+                    <input type="checkbox" id="weekday-mon" class="weekday"/>
+                    <label for="weekday-mon">mon</label>
+                    <input type="checkbox" id="weekday-tus" class="weekday"/>
+                    <label for="weekday-tus">tus</label>
+                    <input type="checkbox" id="weekday-tur" class="weekday"/>
+                    <label for="weekday-tur">ter</label>
+                    <input type="checkbox" id="weekday-wen" class="weekday"/>
+                    <label for="weekday-wen">wen</label>
+                    <input type="checkbox" id="weekday-fri" class="weekday"/>
+                    <label for="weekday-fri">fri</label>
+                </div>
+            </tr>
+            <tr>
+                <td></td>
+
+            </tr>
+            <tr>
+                <h4>ساعت</h4>
+                <input type="time" id="timeText" name="timeText"
+                       min="09:00" max="18:00" required>
+            </tr>
+
+            <tr>
+                <td></td>
+            <tr>
+                <td>
+<!--                    <a href="/editOrConfirmInformation.html"/>-->
+                    <input id="submit" type="button" value="ادامه" class="btn btn-success"/>
+<!--                    <a>-->
+            <td>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="/logout.jsp"/><input id="exit" type="button"  value="خروج" class="btn btn-success" onclick="myFunction()"/><a>
+                <td>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+<div id="result" style="width:100%;hight:300px;background: beige"></div>
+
+</div>
+</body>
+</html>
