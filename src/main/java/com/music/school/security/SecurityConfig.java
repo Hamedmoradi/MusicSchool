@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 
 import javax.sql.DataSource;
 
@@ -56,7 +57,9 @@ public void configure(HttpSecurity http) throws Exception {
 	http
 			.antMatcher("/**")
 			.authorizeRequests()
-			.anyRequest()
+			.requestMatchers(EndpointRequest.to("health", "flyway", "info"))
+			.permitAll()
+			.requestMatchers(EndpointRequest.toAnyEndpoint())
 			.hasRole("USER")
 			.anyRequest()
 			.fullyAuthenticated()
@@ -70,10 +73,9 @@ public void configure(HttpSecurity http) throws Exception {
 			.logout()
 			.logoutSuccessUrl("/logout.jsp")
 			.and()
-			.httpBasic()
-			.and()
 			.csrf()
-			.disable();
+			.disable()
+			.httpBasic();
 	
 }
 
